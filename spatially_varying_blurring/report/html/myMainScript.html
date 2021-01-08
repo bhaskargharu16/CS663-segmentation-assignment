@@ -1,0 +1,365 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>myMainScript</title><meta name="generator" content="MATLAB 9.9"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-10-18"><meta name="DC.source" content="myMainScript.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">MyMainScript</a></li><li><a href="#2">Your code here</a></li><li><a href="#3">Reading images</a></li><li><a href="#4">mask generation for bird</a></li><li><a href="#5">Original Image, Mask for foreground of "flower.jpg", Blacked out foreground , blacked out bakground</a></li><li><a href="#9">Blurring of background for "bird.jpg"</a></li><li><a href="#10">Space varying r values for "bird.jpg"</a></li><li><a href="#11">Blurring kernels</a></li><li><a href="#16">mask generation for flower</a></li><li><a href="#17">Original Image, Mask for foreground of "flower.jpg", Blacked out foreground , blacked out bakground</a></li><li><a href="#21">Blurring of background for "flower.jpg"</a></li><li><a href="#22">Spacially varying r values for "flower.jpg"</a></li><li><a href="#23">Blurring kernels</a></li></ul></div><h2 id="1">MyMainScript</h2><pre class="codeinput">tic;
+</pre><h2 id="2">Your code here</h2><pre class="codeinput">clear;
+</pre><h2 id="3">Reading images</h2><pre class="codeinput">im1 = imread(<span class="string">'../data/bird.jpg'</span>);
+im2 = imread(<span class="string">'../data/flower.jpg'</span>);
+</pre><h2 id="4">mask generation for bird</h2><pre class="codeinput">rng(180050004);
+im = im1;
+hs = 10;
+hr = 80;
+resize = 1;
+num_clusters = 30;
+iter2 = 30;
+[output1,shifting_points1,idx1] = myMeanShiftSegmentation(im,hs,hr,resize,num_clusters,iter2);
+
+idx1 = reshape(idx1,[size(output1,1),size(output1,2)]);
+M = idx1;
+M(M==14 | M==19 | M==1) = 1;
+M(M~=1) = 0;
+M = my_edit(logical(M));
+</pre><pre class="codeoutput">Elapsed time is 399.084052 seconds.
+
+
+</pre><h2 id="5">Original Image, Mask for foreground of "flower.jpg", Blacked out foreground , blacked out bakground</h2><pre class="codeinput">save(<span class="string">"../images/im1.mat"</span>,<span class="string">"im1"</span>);
+imshow(im1);
+</pre><img vspace="5" hspace="5" src="myMainScript_01.png" alt=""> <pre class="codeinput">save(<span class="string">"../images/M_bird.mat"</span>,<span class="string">"M"</span>);
+imshow(logical(M));
+</pre><img vspace="5" hspace="5" src="myMainScript_02.png" alt=""> <pre class="codeinput">X = im1;
+
+Aa = M==0;
+Ma = zeros(size(im1));
+Ma(:,:,1) = Aa;
+Ma(:,:,2) = Aa;
+Ma(:,:,3) = Aa;
+
+X(Ma==0)=0;
+save(<span class="string">"../images/Background_Bird.mat"</span>,<span class="string">"X"</span>);
+imshow(X);
+</pre><img vspace="5" hspace="5" src="myMainScript_03.png" alt=""> <pre class="codeinput">X = im1;
+X(Ma==1)=0;
+save(<span class="string">"../images/Foreground_Bird.mat"</span>,<span class="string">"X"</span>);
+imshow(X);
+</pre><img vspace="5" hspace="5" src="myMainScript_04.png" alt=""> <h2 id="9">Blurring of background for "bird.jpg"</h2><pre class="codeinput">Out = zeros(size(im1));
+[Out(:,:,1), ~] = mySpatiallyVaryingKernel(im1(:,:,1),M,40);
+[Out(:,:,2),~] = mySpatiallyVaryingKernel(im1(:,:,2),M,40);
+[Out(:,:,3),krnl] = mySpatiallyVaryingKernel(im1(:,:,3),M,40);
+Out(:,:,1) = mat2gray(Out(:,:,1));
+Out(:,:,2) = mat2gray(Out(:,:,2));
+Out(:,:,3) = mat2gray(Out(:,:,3));
+
+
+save(<span class="string">"../images/BackgroundBlur_Bird.mat"</span>,<span class="string">"Out"</span>);
+imshow(Out);
+</pre>
+<img vspace="5" hspace="5" src="myMainScript_22.png" alt=""> 
+<h2 id="10">Space varying r values for "bird.jpg"</h2><pre class="codeinput">myNumOfColors = 40;
+myColorScale = [ [0:1/(myNumOfColors-1):1]' , [0:1/(myNumOfColors-1):1]' , [0:1/(myNumOfColors-1):1]' ];
+save(<span class="string">"../images/rvalues_Bird.mat"</span>,<span class="string">"krnl"</span>);
+imagesc(single(krnl),[0,40]), title(<span class="string">'Kernel bird'</span>),colormap(myColorScale),daspect ([1 1 1]); axis <span class="string">tight</span>; colorbar;
+</pre><img vspace="5" hspace="5" src="myMainScript_05.png" alt=""> <h2 id="11">Blurring kernels</h2><pre class="codeinput">imshow(fspecial(<span class="string">'disk'</span>,0.2*40),[]);
+</pre><img vspace="5" hspace="5" src="myMainScript_06.png" alt=""> <pre class="codeinput">imshow(fspecial(<span class="string">'disk'</span>,0.4*40),[]);
+</pre><img vspace="5" hspace="5" src="myMainScript_07.png" alt=""> <pre class="codeinput">imshow(fspecial(<span class="string">'disk'</span>,0.6*40),[]);
+</pre><img vspace="5" hspace="5" src="myMainScript_08.png" alt=""> <pre class="codeinput">imshow(fspecial(<span class="string">'disk'</span>,0.8*40),[]);
+</pre><img vspace="5" hspace="5" src="myMainScript_09.png" alt=""> <pre class="codeinput">imshow(fspecial(<span class="string">'disk'</span>,40),[]);
+</pre><img vspace="5" hspace="5" src="myMainScript_10.png" alt=""> <h2 id="16">mask generation for flower</h2><pre class="codeinput">rng(180050109);
+im = im2;
+hs = 7;
+hr = 36;
+resize = 1;
+num_clusters = 25;
+iter3 = 40;
+[output3,shifting_points3,idx3] = myMeanShiftSegmentation(im,hs,hr,resize,num_clusters,iter3);
+
+idx3 = reshape(idx3,[size(output3,1),size(output3,2)]);
+M = idx3;
+M(M==1) = 0;
+M(M==10 | M==7 | M==24) = 1;
+M(M~=1) = 0;
+</pre><pre class="codeoutput">Elapsed time is 46.581515 seconds.
+</pre><h2 id="17">Original Image, Mask for foreground of "flower.jpg", Blacked out foreground , blacked out bakground</h2><pre class="codeinput">imshow(im2);
+</pre><img vspace="5" hspace="5" src="myMainScript_11.png" alt=""> <pre class="codeinput">imshow(logical(M));
+</pre><img vspace="5" hspace="5" src="myMainScript_12.png" alt=""> <pre class="codeinput">X = im2;
+
+Aa = M==0;
+Ma = zeros(size(im2));
+Ma(:,:,1) = Aa;
+Ma(:,:,2) = Aa;
+Ma(:,:,3) = Aa;
+
+X(Ma==0)=0;
+imshow(X);
+</pre><img vspace="5" hspace="5" src="myMainScript_13.png" alt=""> <pre class="codeinput">X = im2;
+X(Ma==1)=0;
+imshow(X);
+</pre><img vspace="5" hspace="5" src="myMainScript_14.png" alt=""> <h2 id="21">Blurring of background for "flower.jpg"</h2><pre class="codeinput">Out = zeros(size(im2));
+[Out(:,:,1),~] = mySpatiallyVaryingKernel(im2(:,:,1),M,20);
+[Out(:,:,2),~] = mySpatiallyVaryingKernel(im2(:,:,2),M,20);
+[Out(:,:,3),krnl] = mySpatiallyVaryingKernel(im2(:,:,3),M,20);
+
+Out(:,:,1) = mat2gray(Out(:,:,1));
+Out(:,:,2) = mat2gray(Out(:,:,2));
+Out(:,:,3) = mat2gray(Out(:,:,3));
+
+
+imshow(Out);
+</pre><img vspace="5" hspace="5" src="myMainScript_15.png" alt=""> <h2 id="22">Spacially varying r values for "flower.jpg"</h2><pre class="codeinput">myNumOfColors = 20;
+myColorScale = [ [0:1/(myNumOfColors-1):1]' , [0:1/(myNumOfColors-1):1]' , [0:1/(myNumOfColors-1):1]' ];
+
+imagesc(single(krnl),[0,20]), title(<span class="string">'kernel flower'</span>),colormap(myColorScale),daspect ([1 1 1]); axis <span class="string">tight</span>; colorbar;
+</pre><img vspace="5" hspace="5" src="myMainScript_16.png" alt=""> <h2 id="23">Blurring kernels</h2><pre class="codeinput">imshow(fspecial(<span class="string">'disk'</span>,0.2*20),[]);
+</pre><img vspace="5" hspace="5" src="myMainScript_17.png" alt=""> <pre class="codeinput">imshow(fspecial(<span class="string">'disk'</span>,0.4*20),[]);
+</pre><img vspace="5" hspace="5" src="myMainScript_18.png" alt=""> <pre class="codeinput">imshow(fspecial(<span class="string">'disk'</span>,0.6*20),[]);
+</pre><img vspace="5" hspace="5" src="myMainScript_19.png" alt=""> <pre class="codeinput">imshow(fspecial(<span class="string">'disk'</span>,0.8*20),[]);
+</pre><img vspace="5" hspace="5" src="myMainScript_20.png" alt=""> <pre class="codeinput">imshow(fspecial(<span class="string">'disk'</span>,20),[]);
+
+
+
+
+toc;
+</pre><pre class="codeoutput">Elapsed time is 127.235600 seconds.
+</pre><img vspace="5" hspace="5" src="myMainScript_21.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2020b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% MyMainScript
+tic;
+%% Your code here
+
+clear;
+%% Reading images
+
+im1 = imread('../data/bird.jpg');
+im2 = imread('../data/flower.jpg');
+
+%% mask generation for bird
+rng(180050004);
+im = im1;
+hs = 10;
+hr = 80;
+resize = 1;
+num_clusters = 30;
+iter2 = 30;
+[output1,shifting_points1,idx1] = myMeanShiftSegmentation(im,hs,hr,resize,num_clusters,iter2);
+
+idx1 = reshape(idx1,[size(output1,1),size(output1,2)]);
+M = idx1;
+M(M==14 | M==19 | M==1) = 1;
+M(M~=1) = 0;
+M = my_edit(logical(M));
+%% Original Image, Mask for foreground of "flower.jpg", Blacked out foreground , blacked out bakground 
+save("../images/im1.mat","im1");
+imshow(im1);
+%%
+save("../images/M_bird.mat","M");
+imshow(logical(M));
+%%
+X = im1;
+
+Aa = M==0;
+Ma = zeros(size(im1));
+Ma(:,:,1) = Aa;
+Ma(:,:,2) = Aa;
+Ma(:,:,3) = Aa;
+
+X(Ma==0)=0;
+save("../images/Background_Bird.mat","X");
+imshow(X);
+%%
+X = im1;
+X(Ma==1)=0;
+save("../images/Foreground_Bird.mat","X");
+imshow(X);
+
+%% Blurring of background for "bird.jpg"
+Out = zeros(size(im1));
+[Out(:,:,1), ~] = mySpatiallyVaryingKernel(im1(:,:,1),M,40);
+[Out(:,:,2),~] = mySpatiallyVaryingKernel(im1(:,:,2),M,40);
+[Out(:,:,3),krnl] = mySpatiallyVaryingKernel(im1(:,:,3),M,40);
+Out(:,:,1) = mat2gray(Out(:,:,1));
+Out(:,:,2) = mat2gray(Out(:,:,2));
+Out(:,:,3) = mat2gray(Out(:,:,3));
+
+
+save("../images/BackgroundBlur_Bird.mat","Out");
+imshow(Out);
+
+
+
+%% Space varying r values for "bird.jpg"
+
+myNumOfColors = 40;
+myColorScale = [ [0:1/(myNumOfColors-1):1]' , [0:1/(myNumOfColors-1):1]' , [0:1/(myNumOfColors-1):1]' ];
+save("../images/rvalues_Bird.mat","krnl");
+imagesc(single(krnl),[0,40]), title('Kernel bird'),colormap(myColorScale),daspect ([1 1 1]); axis tight; colorbar;
+
+
+
+%% Blurring kernels
+
+imshow(fspecial('disk',0.2*40),[]);
+
+%%
+
+imshow(fspecial('disk',0.4*40),[]);
+
+%%
+
+imshow(fspecial('disk',0.6*40),[]);
+
+%%
+
+imshow(fspecial('disk',0.8*40),[]);
+
+%%
+
+imshow(fspecial('disk',40),[]);
+
+%% mask generation for flower
+rng(180050109);
+im = im2;
+hs = 7;
+hr = 36;
+resize = 1;
+num_clusters = 25; 
+iter3 = 40;
+[output3,shifting_points3,idx3] = myMeanShiftSegmentation(im,hs,hr,resize,num_clusters,iter3);
+
+idx3 = reshape(idx3,[size(output3,1),size(output3,2)]);
+M = idx3;
+M(M==1) = 0;
+M(M==10 | M==7 | M==24) = 1;
+M(M~=1) = 0;
+
+%% Original Image, Mask for foreground of "flower.jpg", Blacked out foreground , blacked out bakground 
+imshow(im2);
+%%
+imshow(logical(M));
+%%
+X = im2;
+
+Aa = M==0;
+Ma = zeros(size(im2));
+Ma(:,:,1) = Aa;
+Ma(:,:,2) = Aa;
+Ma(:,:,3) = Aa;
+
+X(Ma==0)=0;
+imshow(X);
+%%
+X = im2;
+X(Ma==1)=0;
+imshow(X);
+
+%% Blurring of background for "flower.jpg"
+Out = zeros(size(im2));
+[Out(:,:,1),~] = mySpatiallyVaryingKernel(im2(:,:,1),M,20);
+[Out(:,:,2),~] = mySpatiallyVaryingKernel(im2(:,:,2),M,20);
+[Out(:,:,3),krnl] = mySpatiallyVaryingKernel(im2(:,:,3),M,20);
+
+Out(:,:,1) = mat2gray(Out(:,:,1));
+Out(:,:,2) = mat2gray(Out(:,:,2));
+Out(:,:,3) = mat2gray(Out(:,:,3));
+
+
+imshow(Out);
+
+%% Spacially varying r values for "flower.jpg"
+
+myNumOfColors = 20;
+myColorScale = [ [0:1/(myNumOfColors-1):1]' , [0:1/(myNumOfColors-1):1]' , [0:1/(myNumOfColors-1):1]' ];
+
+imagesc(single(krnl),[0,20]), title('kernel flower'),colormap(myColorScale),daspect ([1 1 1]); axis tight; colorbar;
+
+%% Blurring kernels
+
+imshow(fspecial('disk',0.2*20),[]);
+
+%%
+
+imshow(fspecial('disk',0.4*20),[]);
+
+%%
+
+imshow(fspecial('disk',0.6*20),[]);
+
+%%
+
+imshow(fspecial('disk',0.8*20),[]);
+
+%%
+
+imshow(fspecial('disk',20),[]);
+
+
+
+
+toc;
+
+##### SOURCE END #####
+--></body></html>

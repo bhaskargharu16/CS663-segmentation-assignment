@@ -1,0 +1,206 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>myMainScript</title><meta name="generator" content="MATLAB 9.8"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-10-17"><meta name="DC.source" content="myMainScript.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">MyMainScript</a></li><li><a href="#2">Original and smoothed image</a></li><li><a href="#3">Partial Derivatives along X and Y axis</a></li><li><a href="#4">Principal and other Eigen Value Images</a></li><li><a href="#5">Harris Response</a></li><li><a href="#6">Corners and Final Image</a></li></ul></div><h2 id="1">MyMainScript</h2><pre class="codeinput">clear;
+tic;
+
+myNumOfColors = 256;
+myColorScale = [ [0:1/(myNumOfColors-1):1]' , [0:1/(myNumOfColors-1):1]' , [0:1/(myNumOfColors-1):1]' ];
+
+path = load(<span class="string">'../data/boat.mat'</span>);
+Input = path.imageOrig;
+Input = double(Input);
+<span class="comment">%%Harris Corner Detection</span>
+[Img_blur, Ix, Iy, min_eig, max_eig, corn_measure, corners, final_img] = myHarrisCornerDetector(Input, 0.5, 1.4 ,0.01);
+</pre><h2 id="2">Original and smoothed image</h2><pre class="codeinput">figure;
+subplot(1,2,1);
+imagesc(Input), title(<span class="string">'Input Image'</span>) ;colormap(myColorScale); colormap <span class="string">gray</span>; colorbar;
+daspect([1,1,1]);
+axis <span class="string">tight</span>;
+subplot(1,2,2);
+imagesc(Img_blur), title(<span class="string">'Image with Gaussian smoothening'</span>) ;colormap(myColorScale); colormap <span class="string">gray</span>; colorbar;
+daspect([1,1,1]);
+axis <span class="string">tight</span>;
+</pre><img vspace="5" hspace="5" src="myMainScript_01.png" alt=""> <h2 id="3">Partial Derivatives along X and Y axis</h2><pre class="codeinput">figure;
+subplot(1,2,1);
+imagesc((Ix-min(min(Ix)))./(max(max(Ix))- min(min(Ix)))), title(<span class="string">'Derivative along X-Axis'</span>) ;colormap(myColorScale); colormap <span class="string">gray</span>; colorbar;
+daspect([1,1,1]);
+axis <span class="string">tight</span>;
+subplot(1,2,2);
+imagesc((Iy-min(min(Iy)))./(max(max(Iy))- min(min(Iy)))), title(<span class="string">'Derivative along Y-Axis'</span>) ;colormap(myColorScale); colormap <span class="string">gray</span>; colorbar;
+daspect([1,1,1]);
+axis <span class="string">tight</span>;
+</pre><img vspace="5" hspace="5" src="myMainScript_02.png" alt=""> <h2 id="4">Principal and other Eigen Value Images</h2><pre class="codeinput">figure;
+subplot(1,2,1);
+imagesc((max_eig-min(min(max_eig)))./ ((max(max(max_eig)))- min(min(max_eig)))), title(<span class="string">'Image of Principal Eigen Value'</span>) ;
+colormap(myColorScale); colormap <span class="string">gray</span>; colorbar;
+daspect([1,1,1]);
+axis <span class="string">tight</span>;
+subplot(1,2,2);
+imagesc((min_eig-min(min(min_eig)))./ ((max(max(min_eig)))- min(min(min_eig)))), title(<span class="string">'Image of Other Eigen Value'</span>) ;
+colormap(myColorScale); colormap <span class="string">gray</span>; colorbar;
+daspect([1,1,1]);
+axis <span class="string">tight</span>;
+</pre><img vspace="5" hspace="5" src="myMainScript_03.png" alt=""> <h2 id="5">Harris Response</h2><pre class="codeinput">figure;
+imagesc((corn_measure- min(min(corn_measure)))./(max(max(corn_measure))- min(min(corn_measure)))), title(<span class="string">'Cornerness before non-max suppression and thresholding'</span>);
+colormap(myColorScale); colormap <span class="string">jet</span>;
+daspect([1,1,1]);
+axis <span class="string">tight</span>;
+colorbar;
+</pre><img vspace="5" hspace="5" src="myMainScript_04.png" alt=""> <h2 id="6">Corners and Final Image</h2><pre class="codeinput">[r,c] = find(corners);
+
+figure;
+subplot(1,2,1);
+imagesc(corners), title(<span class="string">'Corners post non-max suppression and thresholding'</span>) ;colormap(myColorScale); colormap <span class="string">gray</span>; colorbar;
+daspect([1,1,1]);
+axis <span class="string">tight</span>;
+subplot(1,2,2);
+imagesc(final_img), title(<span class="string">'Original Image with corners marked'</span>); colormap(myColorScale); colormap <span class="string">gray</span>; colorbar;
+daspect([1,1,1]);
+axis <span class="string">tight</span>;
+hold <span class="string">on</span>;
+<span class="comment">%insert markers</span>
+plot(c,r,<span class="string">'x'</span>,<span class="string">'color'</span>,<span class="string">'b'</span>,<span class="string">'linewidth'</span>,0.7);
+hold <span class="string">off</span>;
+
+toc;
+</pre><pre class="codeoutput">Elapsed time is 7.319124 seconds.
+</pre><img vspace="5" hspace="5" src="myMainScript_05.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2020a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% MyMainScript
+clear;
+tic;
+
+myNumOfColors = 256;
+myColorScale = [ [0:1/(myNumOfColors-1):1]' , [0:1/(myNumOfColors-1):1]' , [0:1/(myNumOfColors-1):1]' ];
+
+path = load('../data/boat.mat');
+Input = path.imageOrig;
+Input = double(Input);
+%%Harris Corner Detection
+[Img_blur, Ix, Iy, min_eig, max_eig, corn_measure, corners, final_img] = myHarrisCornerDetector(Input, 0.5, 1.4 ,0.01); 
+%% Original and smoothed image
+figure;
+subplot(1,2,1);
+imagesc(Input), title('Input Image') ;colormap(myColorScale); colormap gray; colorbar;
+daspect([1,1,1]);
+axis tight;
+subplot(1,2,2);
+imagesc(Img_blur), title('Image with Gaussian smoothening') ;colormap(myColorScale); colormap gray; colorbar;
+daspect([1,1,1]);
+axis tight;
+%% Partial Derivatives along X and Y axis
+figure;
+subplot(1,2,1);
+imagesc((Ix-min(min(Ix)))./(max(max(Ix))- min(min(Ix)))), title('Derivative along X-Axis') ;colormap(myColorScale); colormap gray; colorbar;
+daspect([1,1,1]);
+axis tight;
+subplot(1,2,2);
+imagesc((Iy-min(min(Iy)))./(max(max(Iy))- min(min(Iy)))), title('Derivative along Y-Axis') ;colormap(myColorScale); colormap gray; colorbar;
+daspect([1,1,1]);
+axis tight;
+%% Principal and other Eigen Value Images
+figure;
+subplot(1,2,1);
+imagesc((max_eig-min(min(max_eig)))./ ((max(max(max_eig)))- min(min(max_eig)))), title('Image of Principal Eigen Value') ;
+colormap(myColorScale); colormap gray; colorbar;
+daspect([1,1,1]);
+axis tight;
+subplot(1,2,2);
+imagesc((min_eig-min(min(min_eig)))./ ((max(max(min_eig)))- min(min(min_eig)))), title('Image of Other Eigen Value') ;
+colormap(myColorScale); colormap gray; colorbar;
+daspect([1,1,1]);
+axis tight;
+%% Harris Response
+figure;
+imagesc((corn_measure- min(min(corn_measure)))./(max(max(corn_measure))- min(min(corn_measure)))), title('Cornerness before non-max suppression and thresholding'); 
+colormap(myColorScale); colormap jet; 
+daspect([1,1,1]);
+axis tight;
+colorbar;
+%% Corners and Final Image      
+[r,c] = find(corners);
+
+figure;
+subplot(1,2,1);
+imagesc(corners), title('Corners post non-max suppression and thresholding') ;colormap(myColorScale); colormap gray; colorbar;
+daspect([1,1,1]);
+axis tight;
+subplot(1,2,2);
+imagesc(final_img), title('Original Image with corners marked'); colormap(myColorScale); colormap gray; colorbar;
+daspect([1,1,1]);
+axis tight;
+hold on;
+%insert markers
+plot(c,r,'x','color','b','linewidth',0.7);
+hold off;
+
+toc;
+##### SOURCE END #####
+--></body></html>
